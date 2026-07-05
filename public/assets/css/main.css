@@ -291,6 +291,27 @@ img {
     transform: translateY(0);
 }
 
+.btn-accent {
+    background: var(--color-accent);
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(232, 168, 56, 0.3);
+}
+
+.btn-accent:hover {
+    background: var(--color-accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(232, 168, 56, 0.4);
+    color: #fff;
+}
+
+.btn-accent:active {
+    transform: translateY(0);
+}
+
+.btn-block {
+    width: 100%;
+}
+
 /* Alert */
 .alert {
     padding: 0.875rem 1.25rem;
@@ -1048,5 +1069,182 @@ img {
 
     .hero-badges {
         justify-content: center;
+    }
+}
+
+/* ===== Reservation Page ===== */
+.reservation-page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 1rem 4rem;
+}
+
+.reservation-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.reservation-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    margin-top: 0.5rem;
+    letter-spacing: -0.01em;
+}
+
+.reservation-header p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+.reservation-form-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius);
+    padding: 2rem;
+    transition: border-color var(--transition);
+}
+
+.reservation-form-card:hover {
+    border-color: var(--color-border);
+}
+
+.reservation-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+}
+
+.reservation-form .form-group label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.85rem;
+    margin-bottom: 0.35rem;
+    color: var(--color-text-muted);
+}
+
+.reservation-form input,
+.reservation-form textarea {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.925rem;
+    background: var(--color-bg);
+    transition: all var(--transition);
+    outline: none;
+}
+
+.reservation-form input:focus,
+.reservation-form textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(193, 68, 46, 0.08);
+    background: var(--color-surface);
+}
+
+.reservation-form .btn {
+    margin-top: 1rem;
+}
+
+.reservation-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.reservation-summary strong {
+    color: var(--color-text);
+}
+
+.reservation-summary .btn {
+    margin-top: 0;
+    margin-left: auto;
+}
+
+.table-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.table-option {
+    display: block;
+    cursor: pointer;
+}
+
+.table-option input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.table-option-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    transition: all var(--transition);
+    text-align: center;
+}
+
+.table-option input:checked + .table-option-content {
+    border-color: var(--color-primary);
+    background: rgba(193, 68, 46, 0.04);
+    box-shadow: 0 0 0 3px rgba(193, 68, 46, 0.08);
+}
+
+.table-option:hover .table-option-content {
+    border-color: var(--color-primary-light);
+}
+
+.table-option-number {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--color-text);
+}
+
+.table-option-capacity {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.reservation-empty {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.reservation-empty p {
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.reservation-empty .btn {
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .reservation-form .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .reservation-summary {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .reservation-summary .btn {
+        margin-left: 0;
     }
 }

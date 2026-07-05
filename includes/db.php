@@ -65,6 +65,26 @@ function create_tables() {
         "CREATE TABLE IF NOT EXISTS settings (
             key TEXT PRIMARY KEY,
             value TEXT
+        );",
+        "CREATE TABLE IF NOT EXISTS tables (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            table_number INTEGER NOT NULL UNIQUE,
+            capacity INTEGER NOT NULL,
+            status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active', 'maintenance')),
+            created_at TEXT DEFAULT (datetime('now', 'localtime'))
+        );",
+        "CREATE TABLE IF NOT EXISTS reservations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            guest_count INTEGER NOT NULL,
+            reservation_date TEXT NOT NULL,
+            reservation_time TEXT NOT NULL,
+            table_id INTEGER NOT NULL,
+            status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'confirmed', 'cancelled')),
+            note TEXT,
+            created_at TEXT DEFAULT (datetime('now', 'localtime')),
+            FOREIGN KEY (table_id) REFERENCES tables(id)
         );"
     ];
 

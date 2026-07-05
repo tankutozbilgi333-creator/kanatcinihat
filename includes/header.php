@@ -20,6 +20,8 @@
                     <li><a href="<?php echo SITE_URL; ?>/admin">Dashboard</a></li>
                     <li><a href="<?php echo SITE_URL; ?>/admin/products">Ürünler</a></li>
                     <li><a href="<?php echo SITE_URL; ?>/admin/orders">Siparişler</a></li>
+                    <li><a href="<?php echo SITE_URL; ?>/admin/reservations">Rezervasyonlar</a></li>
+                    <li><a href="<?php echo SITE_URL; ?>/admin/tables">Masalar</a></li>
                     <li><a href="<?php echo SITE_URL; ?>/admin/messages">Mesajlar</a></li>
                     <li><a href="<?php echo SITE_URL; ?>/admin/settings">Ayarlar</a></li>
                     <li><a href="<?php echo SITE_URL; ?>/admin/logout">Çıkış</a></li>

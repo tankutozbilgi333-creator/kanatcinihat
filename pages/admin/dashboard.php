@@ -11,6 +11,10 @@
             <p class="stat-number"><?php echo get_order_count('new'); ?></p>
         </div>
         <div class="stat-card">
+            <h3>Bekleyen Rezervasyon</h3>
+            <p class="stat-number"><?php echo get_reservation_count('pending'); ?></p>
+        </div>
+        <div class="stat-card">
             <h3>Okunmamış Mesaj</h3>
             <p class="stat-number"><?php echo get_unread_message_count(); ?></p>
         </div>

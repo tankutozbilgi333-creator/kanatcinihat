@@ -56,6 +56,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Rezervasyon onay/iptal
+    document.querySelectorAll('.reservation-action').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const action = this.dataset.action;
+            const token = getCsrfToken();
+            const row = this.closest('tr');
+
+            if (action === 'cancel' && !confirm('Rezervasyonu iptal etmek istediğinize emin misiniz?')) {
+                return;
+            }
+
+            fetch('/admin/reservation_update_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id=' + id + '&action=' + action + '&_csrf_token=' + encodeURIComponent(token)
+            })
+            .then(function(response) { return response.text(); })
+            .then(function(data) {
+                if (data === 'OK') {
+                    location.reload();
+                }
+            });
+        });
+    });
+
     // Mesaj okundu işaretleme
     document.querySelectorAll('.mark-read-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {

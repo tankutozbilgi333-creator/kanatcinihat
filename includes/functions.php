@@ -352,3 +352,176 @@ function upload_image($file, $target_dir) {
 
     return ['success' => false, 'error' => 'Dosya kaydedilemedi.'];
 }
+
+// ========== Masa (Tables) Fonksiyonları ==========
+
+function get_tables($only_active = false) {
+    $pdo = get_db_connection();
+    $sql = "SELECT * FROM tables";
+    $params = [];
+    if ($only_active) {
+        $sql .= " WHERE status = 'active'";
+    }
+    $sql .= " ORDER BY table_number ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+function get_table($id) {
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("SELECT * FROM tables WHERE id = :id");
+    $stmt->execute([':id' => $id]);
+    return $stmt->fetch();
+}
+
+function create_table($data) {
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("INSERT INTO tables (table_number, capacity, status)
+                           VALUES (:table_number, :capacity, :status)");
+    return $stmt->execute([
+        ':table_number' => $data['table_number'],
+        ':capacity' => $data['capacity'],
+        ':status' => $data['status'] ?? 'active'
+    ]);
+}
+
+function update_table($id, $data) {
+    $pdo = get_db_connection();
+    $fields = [];
+    $params = [':id' => $id];
+    foreach (['table_number', 'capacity', 'status'] as $field) {
+        if (array_key_exists($field, $data)) {
+            $fields[] = "$field = :$field";
+            $params[":$field"] = $data[$field];
+        }
+    }
+    if (empty($fields)) return false;
+    $sql = "UPDATE tables SET " . implode(', ', $fields) . " WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute($params);
+}
+
+function delete_table($id) {
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("DELETE FROM tables WHERE id = :id");
+    return $stmt->execute([':id' => $id]);
+}
+
+function get_table_count() {
+    $pdo = get_db_connection();
+    $stmt = $pdo->query("SELECT COUNT(*) FROM tables");
+    return $stmt->fetchColumn();
+}
+
+// ========== Rezervasyon (Reservations) Fonksiyonları ==========
+
+function get_reservations($status = null, $date = null) {
+    $pdo = get_db_connection();
+    $sql = "SELECT r.*, t.table_number FROM reservations r
+            LEFT JOIN tables t ON r.table_id = t.id";
+    $params = [];
+    $conditions = [];
+
+    if ($status !== null) {
+        $conditions[] = "r.status = :status";
+        $params[':status'] = $status;
+    }
+    if ($date !== null) {
+        $conditions[] = "r.reservation_date = :date";
+        $params[':date'] = $date;
+    }
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(" AND ", $conditions);
+    }
+    $sql .= " ORDER BY r.reservation_date DESC, r.reservation_time ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+function get_reservation($id) {
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("SELECT r.*, t.table_number FROM reservations r
+                           LEFT JOIN tables t ON r.table_id = t.id
+                           WHERE r.id = :id");
+    $stmt->execute([':id' => $id]);
+    return $stmt->fetch();
+}
+
+function create_reservation($data) {
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("INSERT INTO reservations (name, phone, guest_count, reservation_date, reservation_time, table_id, note, status)
+                           VALUES (:name, :phone, :guest_count, :reservation_date, :reservation_time, :table_id, :note, :status)");
+    $stmt->execute([
+        ':name' => $data['name'],
+        ':phone' => $data['phone'],
+        ':guest_count' => $data['guest_count'],
+        ':reservation_date' => $data['reservation_date'],
+        ':reservation_time' => $data['reservation_time'],
+        ':table_id' => $data['table_id'],
+        ':note' => $data['note'] ?? null,
+        ':status' => $data['status'] ?? 'pending'
+    ]);
+    return $pdo->lastInsertId();
+}
+
+function update_reservation_status($id, $status) {
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("UPDATE reservations SET status = :status WHERE id = :id");
+    return $stmt->execute([':status' => $status, ':id' => $id]);
+}
+
+function get_reservation_count($status = null) {
+    $pdo = get_db_connection();
+    $sql = "SELECT COUNT(*) FROM reservations";
+    $params = [];
+    if ($status !== null) {
+        $sql .= " WHERE status = :status";
+        $params[':status'] = $status;
+    }
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchColumn();
+}
+
+// ========== Müsaitlik Sorgusu (Availability) ==========
+
+function get_available_tables($date, $time, $guest_count) {
+    $pdo = get_db_connection();
+    $sql = "SELECT * FROM tables
+            WHERE status = 'active'
+              AND capacity >= :guest_count
+              AND id NOT IN (
+                  SELECT table_id FROM reservations
+                  WHERE reservation_date = :date
+                    AND status IN ('pending', 'confirmed')
+                    AND reservation_time < time(:requested_time, '+2 hours')
+                    AND time(:requested_time) < time(reservation_time, '+2 hours')
+              )
+            ORDER BY table_number ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':guest_count' => $guest_count,
+        ':date' => $date,
+        ':requested_time' => $time
+    ]);
+    return $stmt->fetchAll();
+}
+
+function is_table_available($table_id, $date, $time) {
+    $pdo = get_db_connection();
+    $sql = "SELECT COUNT(*) FROM reservations
+            WHERE table_id = :table_id
+              AND reservation_date = :date
+              AND status IN ('pending', 'confirmed')
+              AND reservation_time < time(:requested_time, '+2 hours')
+              AND time(:requested_time) < time(reservation_time, '+2 hours')";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':table_id' => $table_id,
+        ':date' => $date,
+        ':requested_time' => $time
+    ]);
+    return $stmt->fetchColumn() == 0;
+}

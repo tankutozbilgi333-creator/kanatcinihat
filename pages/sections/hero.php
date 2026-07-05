@@ -5,6 +5,7 @@
             <p>Özel baharatlarla marine edilmiş, odun ateşinde pişirilmiş tavuk kanatları. Her lokmada Gaziantep lezzeti.</p>
             <div class="hero-buttons">
                 <a href="#menu" class="btn btn-primary">Menüyü Gör</a>
+                <a href="<?php echo SITE_URL; ?>/rezervasyon" class="btn btn-accent">Rezervasyon Yap</a>
                 <a href="#subemiz" class="btn btn-secondary">Bizi Bul</a>
             </div>
             <div class="hero-badges">
