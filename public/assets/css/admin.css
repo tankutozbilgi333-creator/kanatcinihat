@@ -1,0 +1,128 @@
+/* Admin Header */
+.admin-header {
+    background: #1a1a2e;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.admin-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+.admin-nav a {
+    color: rgba(255,255,255,0.8);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.admin-nav a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+/* Admin main content */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Admin footer */
+.admin-footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: #1a1a2e;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    margin-top: auto;
+}
+
+/* Login page */
+.admin-login-container {
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.admin-login-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+}
+
+.admin-login-container .form-group label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.admin-login-container .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.admin-login-container .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Image preview */
+.image-preview {
+    margin-top: 0.5rem;
+}
+
+.image-preview img {
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+/* Product form */
+.admin-product-form {
+    max-width: 600px;
+}
+
+/* Responsive admin */
+@media (max-width: 768px) {
+    .admin-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .admin-nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    main {
+        padding: 1rem;
+    }
+}

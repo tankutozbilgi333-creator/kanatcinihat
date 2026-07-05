@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Güvenlik başlıkları
+    <IfModule mod_headers.c>
+        Header set X-Content-Type-Options "nosniff"
+        Header set X-Frame-Options "DENY"
+        Header set X-XSS-Protection "1; mode=block"
+        Header set Referrer-Policy "strict-origin-when-cross-origin"
+    </IfModule>
+
+    # Hassas dosya ve klasörlere erişimi engelle
+    RewriteRule ^(config|database|includes|pages)/ - [F,L]
+
+    # .sqlite, .md, .env dosyalarına erişimi engelle
+    RewriteRule \.(sqlite|md|env|log|json)$ - [F,L]
+
+    # Yüklenen dosyalar içinde PHP çalıştırılmasını engelle
+    RewriteRule ^public/assets/uploads/.*\.(php|phtml|php3|php4|php5|inc)$ - [F,L]
+
+    # Mevcut bir dosya veya dizin değilse, isteği index.php'ye yönlendir
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [L]
+</IfModule>
