@@ -1,0 +1,26 @@
+# Database
+database/*.sqlite
+database/*.sqlite-journal
+database/*.sqlite-wal
+database/*.sqlite-shm
+
+# Uploaded images
+public/assets/uploads/*
+!public/assets/uploads/.htaccess
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini
+ehthumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
